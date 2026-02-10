@@ -1,0 +1,21 @@
+functions:
+  itinerary_tool:
+    _type: travel_itinerary
+
+llms:
+  nim_llm:
+    _type: nim
+    model_name: ${MODEL_NAME}
+    base_url: ${NVIDIA_BASE_URL}
+    api_key: ${NVIDIA_API_KEY}
+    temperature: 0.7
+    top_p: 0.9
+    max_tokens: 2048
+
+workflow:
+  _type: react_agent
+  tool_names: [itinerary_tool]
+  llm_name: nim_llm
+  verbose: true
+  handle_parsing_errors: true
+  max_retries: 2
