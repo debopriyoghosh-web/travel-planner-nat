@@ -2,6 +2,9 @@ functions:
   itinerary_tool:
     _type: travel_itinerary
 
+  flight_search:
+    _type: flight_search
+
 llms:
   nim_llm:
     _type: nim
@@ -14,8 +17,9 @@ llms:
 
 workflow:
   _type: react_agent
-  tool_names: [itinerary_tool]
   llm_name: nim_llm
+  tool_names: [flight_search, itinerary_tool]
   verbose: true
   handle_parsing_errors: true
   max_retries: 2
+

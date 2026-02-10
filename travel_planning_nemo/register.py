@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel, Field
 
+
 from nat.builder.function_info import FunctionInfo
 from nat.cli.register_workflow import register_function
 from nat.data_models.function import FunctionBaseConfig
@@ -11,6 +12,8 @@ from .travel_planning_nemo import (
     build_user_prompt,
     call_nvidia_chat_completion,
 )
+
+from .flight_search_tool import FlightSearchInput, FlightSearchOutput, flight_search_tool
 
 
 class TravelItineraryInput(BaseModel):
@@ -73,5 +76,23 @@ async def travel_itinerary(config: TravelItineraryConfig, builder):
         description=(
             "Generate the FINAL trip itinerary in Markdown using the predefined template. "
             "Use this tool whenever the user requests a travel plan or itinerary."
+        ),
+    )
+
+class FlightSearchConfig(FunctionBaseConfig, name="flight_search"):
+    """NAT registration name: flight_search"""
+    pass
+
+
+@register_function(config_type=FlightSearchConfig)
+async def flight_search(config: FlightSearchConfig, builder):
+    async def _inner(input_data: FlightSearchInput) -> FlightSearchOutput:
+        return await flight_search_tool(input_data)
+
+    yield FunctionInfo.from_fn(
+        _inner,
+        description=(
+            "Find flight shopping links and summaries using Tavily web search. "
+            "Use this tool when the user asks about flights, prices, airlines, or routes."
         ),
     )
